@@ -1,6 +1,0 @@
-defmodule BNC.Parser do
-	def parse(line) do
-		case String.split(line) do
-			[<< ?:, prefix :: binary>> | [cmd :: binary | args]]
-	end
-end
