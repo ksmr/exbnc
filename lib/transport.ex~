@@ -1,0 +1,28 @@
+	defmodule Transport do
+		def connect(%State{ssl?: ssl?}, host, port, opts \\ []) do
+			defopts = [:binary,
+								 {:packet, :line},
+								 {:keepalive, true}]
+			if ssl? do
+				:ssl.connect(host, port, defopts ++ opts)
+			else
+				:gen_tcp.connect(host, port, defopts ++ opts)
+			end
+		end
+
+		def send(state, data) do
+			if state.ssl? do
+				:ssl.send(state.socket, data)
+			else
+				:gen_tcp.send(state.socket, data)
+			end
+		end
+
+		def close(state) do
+			if state.ssl? do
+				:ssl.close(state.socket)
+			else
+				:gen_tcp.close(state.socket)
+			end
+		end
+	end
